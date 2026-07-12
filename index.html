@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Sender</title>
+</head>
+<body>
+
+<h2>Settlement Email Sender</h2>
+
+<form action="/send" method="POST" enctype="multipart/form-data">
+
+    <input type="text" name="client_name" placeholder="Client Name"><br><br>
+
+    <input type="text" name="creditor_name" placeholder="Creditor Name"><br><br>
+
+    <input type="text" name="ssn" placeholder="SSN"><br><br>
+
+    <input type="text" name="dob" placeholder="DOB"><br><br>
+
+    <input type="text" name="account_number" placeholder="Account Number"><br><br>
+
+    <textarea
+        name="recipients"
+        placeholder="email1@gmail.com,email2@gmail.com"
+    ></textarea><br><br>
+
+    <input type="file" name="attachment"><br><br>
+
+    <button type="submit">
+        Send Email
+    </button>
+
+</form>
+
+</body>
+</html>
