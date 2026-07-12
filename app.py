@@ -39,8 +39,8 @@ print("Template folder:", app.template_folder)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-USERNAME = "walter.low@unitedsettlement.com"
-PASSWORD = "wegs tcjq nhjc aree"
+USERNAME = os.environ.get("EMAIL_USERNAME")
+PASSWORD = os.environ.get("EMAIL_PASSWORD")
 
 @app.route("/")
 def home():
