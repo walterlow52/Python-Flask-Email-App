@@ -1,19 +1,46 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request  # type: ignore[import]
 import smtplib
 import os
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-from werkzeug.utils import secure_filename
+try:
+    from werkzeug.utils import secure_filename  # type: ignore[import]
+except Exception:
+    # Fallback implementation of secure_filename if werkzeug is unavailable
+    import re
+    from unicodedata import normalize
+
+    def secure_filename(filename: str) -> str:
+        """A minimal replacement for werkzeug.utils.secure_filename.
+
+        Strips leading/trailing spaces, normalizes unicode, removes unsafe
+        characters and ensures the filename is ASCII.
+        """
+        if not filename:
+            return ""
+        filename = str(filename).strip().replace("\\", "/")
+        filename = filename.split("/")[-1]
+        filename = normalize("NFKD", filename).encode("ascii", "ignore").decode("ascii")
+        # keep alphanumeric, dot, underscore and hyphen
+        filename = re.sub(r"[^A-Za-z0-9._-]", "", filename)
+        # prevent filenames like .env or empty
+        if filename in {"", ".", ".."}:
+            return "file"
+        return filename
 
 app = Flask(__name__)
+
+print("App file:", os.path.abspath(__file__))
+print("Root path:", app.root_path)
+print("Template folder:", app.template_folder)
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 USERNAME = "walter.low@unitedsettlement.com"
-PASSWORD = "YOUR_APP_PASSWORD"
+PASSWORD = "wegs tcjq nhjc aree"
 
 @app.route("/")
 def home():
