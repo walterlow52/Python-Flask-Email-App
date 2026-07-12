@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request  # type: ignore[import]
 import smtplib
 import os
+import traceback
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -31,12 +32,13 @@ except Exception:
         return filename
 
 app = Flask(__name__)
+app.config["DEBUG"] = True
 
 print("App file:", os.path.abspath(__file__))
 print("Root path:", app.root_path)
 print("Template folder:", app.template_folder)
 
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = "/tmp/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 USERNAME = os.environ.get("EMAIL_USERNAME")
@@ -56,7 +58,10 @@ def send():
     account_number = request.form["account_number"]
     recipients = request.form["recipients"].split(",")
 
-    file = request.files["attachment"]
+    file = request.files.get("attachment")
+
+    if not file or file.filename == "":
+        return "Please attach a file."
 
     filename = secure_filename(file.filename)
     filepath = os.path.join(UPLOAD_FOLDER, filename)
@@ -122,4 +127,4 @@ Walter Low
     return "Emails Sent Successfully!"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
