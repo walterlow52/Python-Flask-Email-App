@@ -34,6 +34,14 @@ except Exception:
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
+@app.errorhandler(Exception)
+def handle_error(e):
+    traceback.print_exc()
+    return f"""
+    <h1>Error</h1>
+    <pre>{e}</pre>
+    """, 500
+
 print("App file:", os.path.abspath(__file__))
 print("Root path:", app.root_path)
 print("Template folder:", app.template_folder)
@@ -43,6 +51,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 USERNAME = os.environ.get("EMAIL_USERNAME")
 PASSWORD = os.environ.get("EMAIL_PASSWORD")
+print("USERNAME:", USERNAME)
+print("PASSWORD EXISTS:", PASSWORD is not None)
 
 @app.route("/")
 def home():
@@ -50,7 +60,7 @@ def home():
 
 @app.route("/send", methods=["POST"])
 def send():
-
+    
     client_name = request.form["client_name"]
     creditor_name = request.form["creditor_name"]
     ssn = request.form["ssn"]
