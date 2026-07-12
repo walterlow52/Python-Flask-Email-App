@@ -100,10 +100,12 @@ Best Regards,
 Walter Low
 """
 
-    server = smtplib.SMTP("smtp.gmail.com", 587)
-    server.starttls()
+    server = smtplib.SMTP_SSL(
+    "smtp.gmail.com",
+    465
+)
     server.login(USERNAME, PASSWORD)
-
+    
     for recipient in recipients:
 
         msg = MIMEMultipart()
