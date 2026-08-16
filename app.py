@@ -34,14 +34,6 @@ except Exception:
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-@app.errorhandler(Exception)
-def handle_error(e):
-    traceback.print_exc()
-    return f"""
-    <h1>Error</h1>
-    <pre>{e}</pre>
-    """, 500
-
 print("App file:", os.path.abspath(__file__))
 print("Root path:", app.root_path)
 print("Template folder:", app.template_folder)
@@ -139,4 +131,7 @@ Walter Low
     return "Emails Sent Successfully!"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
+    )
